@@ -1,7 +1,7 @@
 <?php 
 include 'Personnage.php';
     // Menu principal du jeu
-echo "Bienvenue, choisis un de ces trois personages: \n";
+echo "Bienvenue dans DragonBall typing fighters Z, choisis un de ces trois personages: \n";
 ChoixPerso();
 function ChoixPerso(){
     $choixperso = readline("1 Goku 2 Gohan 3 Vegeta: ");
