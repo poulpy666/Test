@@ -30,9 +30,9 @@
 //Classes enfants de Personnages
  class Heros extends Personnages{
 
-    public function construct($n,$p,$a,$ni){
+    public function construct($n,$p,$a){
 
-        parent::construct($n);
+        parent::construct($n,$p,$a);
         $this->niveau=$ni;
     }
     public function getNiveau(){
