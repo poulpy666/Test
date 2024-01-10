@@ -3,11 +3,10 @@
     // Menu principal du jeu
     function Partie(){
         //do{
-            switch{
-                //Selection personnage
-                function ChoixPerso(){
-                    $choixperso = readline("1 Goku 2 Gohan 3 Vegeta: ");
-
+        //Selection personnage
+        function ChoixPerso(){
+            $choixperso = readline("1 Goku 2 Gohan 3 Vegeta: ");
+            switch(){
                     case 1:
                         if($choixperso==1){
                     $goku = new Heros();
