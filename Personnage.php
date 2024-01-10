@@ -54,5 +54,6 @@
 
         return $this->niveau;
     }
+    echo "ceci est un test";
  }
 ?>
