@@ -33,21 +33,33 @@
                     
                 } 
             }
-            echo "Bienvenue dans DragonBall typing fighters Z, choisis un de ces trois personages ou quittez le jeu en appuyant sur 4: \n";
+            echo "Bienvenue dans DragonBall typing fighters Z, choisis un de ces trois personages: \n";
             //lancement function ChoixPerso
             ChoixPerso();
         
-            function Ennemi(){
+           /* function Ennemi(){
                 $randm= rand(1,3);
-            
-            }
+                    switch ($randm) {
+                        case 1:
+                            $freezer = new Mechants();
+                            echo $freezer -> getFreezer()." est ton adversaire\n";
+                            break;
+                        case 2:
+                            $cell= new Mechants();
+                            echo $cell-> getCell()." est ton adversaire\n";
+                            break;
+                        case 3:
+                            $buu= new Mechants();
+                            echo $buu -> getBuu()." est ton adversaire\n";
+                            break;
+                    }   
+            }*/
             $stopouencore= readline("1 pour continuer, 2 pour quitter :");
-                      azy je pull
-            
         }  while($stopouencore!=2);
-            
+    //fin partie
     }//on touche pas à cette acollade elle englobe toute la partie
         
     
+
     Partie();//la function Partie englobe tout le déroulement des combats et le jeu en globalité
 ?>

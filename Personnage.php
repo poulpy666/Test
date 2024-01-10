@@ -20,8 +20,7 @@
 
         return $this->pv;
         }
-
-    
+       
     public function getatt(){
         return $this->att;
     }
@@ -53,7 +52,7 @@
        $life = $this->pv=100;
         $att = $this->att="Kaioken Smash";// 25 dégats;
      //niveau == 10 000
-     return $name;
+     return $name; // ouais alors on peut set les pv a 100 sans les get dans les perso
     }
     public function getGohan(){
         $name = $this->nom="Gohan";
@@ -92,12 +91,14 @@
     public function setPV(){
         $this->pv=$npv;
     } 
-
+    
     //Les mechants
     public function getFreezer(){
-        $this->nom="Freezer";
-        $this->pv=100;
-        $this->att="Rayon de la mort";//25 dégats;
+        $name = $this->nom="Freezer";
+        $life = $this->pv=100;
+        $att = $this->att="Rayon de la mort";//25 dégats;
+        return $name;
+
         // niveau == 9 990
     }
     public function getCell(){
