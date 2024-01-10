@@ -49,22 +49,24 @@
 
     //Les Gentils
     public function getGoku(){
-        $this->nom="Goku";
-        $this->pv=100;
-        $this->att="Kaioken Smash";// 25 dégats;
+       $name = $this->nom="Goku";
+       $life = $this->pv=100;
+        $att = $this->att="Kaioken Smash";// 25 dégats;
      //niveau == 10 000
+     return $name;
     }
     public function getGohan(){
-        $this->nom="Gohan";
-        $this->pv=100;
-        $this->att="Masenko";//15 dégats;
-
+        $name = $this->nom="Gohan";
+        $life = $this->pv=100;
+         $att = $this->att="Masenko";//15 dégats;
+         return $name;
         //niveau == 9 000
     }
     public function getVegeta(){
-        $this->nom="Vegeta";
-        $this->pv=100;
-        $this->att="Final Flash";//20 dégats;
+        $name = $this->nom="Vegeta";
+        $life = $this->pv=100;
+         $att = $this->att="Final Flash";//20 dégats;
+         return $name;
         //niveau == 9 500
     }
 
