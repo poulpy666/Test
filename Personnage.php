@@ -5,7 +5,6 @@
     public $pv;
     public $att;
 
-
     public function construct($n,$p,$a){
 
         $this->nom=$n;
@@ -43,7 +42,6 @@
  }
  class Mechants extends Personnages{
 
-    parent::construct($n,$ni,$pn,$a);
     protected $niveau;
     public function __construct($n,$p,$a,$ni){
 
