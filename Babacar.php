@@ -2,246 +2,186 @@
 
 class Personnage {
     public $nom;
-    public $sexe;
-    public $classe;
-    public $pv;
-    public $attaque;
-    public $potion_utilisee;
-    public $defense;
+    public $niveau_puissance;
+    public $points_vie;
 
-    public function __construct($nom, $sexe, $classe) {
+    public function __construct($nom, $niveau_puissance, $points_vie) {
         $this->nom = $nom;
-        $this->sexe = $sexe;
-        $this->classe = $classe;
-
-        if ($classe == "G") {
-            $this->pv = 50;
-            $this->attaque = 8;
-        } elseif ($classe == "M") {
-            $this->pv = 25;
-            $this->attaque = 16;
-        } elseif ($classe == "A") {
-            $this->pv = 35;
-            $this->attaque = 12;
-        } else {
-            $this->pv = rand(20, 40);
-            $this->attaque = rand(5, 15);
-            $this->classe = "R";
-        }
-
-        $this->potion_utilisee = false;
-        $this->defense = false;
+        $this->niveau_puissance = $niveau_puissance;
+        $this->points_vie = $points_vie;
     }
 
     public function attaquer($cible) {
-        // Function to make the character attack
-        if (!$this->defense) {
-            $cible->recevoir_degats($this->attaque);
+        // Code pour attaquer la cible
+    }
+
+    public function prendreDegats($degats) {
+        $this->points_vie -= $degats;
+        if ($this->points_vie <= 0) {
+            $this->mourir();
+        }
+    }
+
+    public function mourir() {
+        echo $this->nom . " est vaincu!\n";
+    }
+}
+
+class Hero extends Personnage {
+    public $super_pouvoir;
+    private $attaque_speciale_debloquee = false;
+
+    public function __construct($nom, $niveau_puissance, $points_vie, $super_pouvoir) {
+        parent::__construct($nom, $niveau_puissance, $points_vie);
+        $this->super_pouvoir = $super_pouvoir;
+    }
+
+    public function choisirAttaque() {
+        echo "Choisissez une attaque pour " . $this->nom . " :\n";
+        echo "1: Attaque normale\n";
+        echo "2: Attaque spéciale\n";
+        echo "3: Se défendre\n";
+
+        $choix = readline("Entrez le numéro de l'attaque que vous souhaitez utiliser : ");
+        return $choix;
+    }
+
+
+    public function attaquer($cible) {
+        if ($this->attaque_speciale_debloquee) {
+            // Utiliser l'attaque spéciale
+            $cible->prendreDegats($this->niveau_puissance + $this->super_pouvoir * 2);
         } else {
-            $cible->recevoir_degats($this->attaque / 2);
-            echo $this->nom. " se défend et inflige " .($this->attaque / 2). " dégâts à " .$cible->nom. " !\n";
-            $this->defense = false;
+            // Utiliser l'attaque normale
+            $cible->prendreDegats($this->niveau_puissance + $this->super_pouvoir);
         }
     }
 
-    public function defendre() {
-        // Function to make the character enter defense mode
-        $this->defense = true;
-        echo $this->nom." se met en position de défense.\n";
+    public function debloquerAttaqueSpeciale() {
+        $this->attaque_speciale_debloquee = true;
+        echo $this->nom . " a débloqué une nouvelle attaque spéciale!\n";
+    }
+}
+
+class Mechant extends Personnage {
+    public $pouvoir_special;
+
+    public function __construct($nom, $niveau_puissance, $points_vie, $pouvoir_special) {
+        parent::__construct($nom, $niveau_puissance, $points_vie);
+        $this->pouvoir_special = $pouvoir_special;
     }
 
-    public function utiliser_potion() {
-        // Function to make the character use a healing potion
-        if ($this->potion_utilisee) {
-            echo "Vous avez déjà utilisé une potion ce tour-ci.\n";
-        } else { // if the character has not used a potion, they gain 25 health points (up to a maximum of 50) and the potion variable is set to true
-            $this->pv += 25;
-            if ($this->pv > 50) {
-                $this->pv = 50;
-            }
-            $this->potion_utilisee = true;
-            echo "Vous avez utilisé une potion et avez récupéré 25 points de vie.\n";
-        }
+    public function choisirAttaque() {
+        // Générer une action aléatoire (1 pour attaquer, 2 pour se défendre)
+        return rand(1, 2);
     }
-    public function recevoir_degats($degats) {
-        // Function to make the character receive damage
-        $this->pv -= $degats;
-        echo $this->nom. " subit ".$degats." dégâts.\n";
-        if ($this->pv <= 0) {
-            echo $this->nom. " a perdu le combat !\n";
+
+    // Redéfinir la méthode attaquer pour utiliser la méthode choisirAttaque
+    public function attaquer($cible) {
+        $action = $this->choisirAttaque();
+
+        if ($action == 1) {
+            // Attaque normale
+            $cible->prendreDegats($this->niveau_puissance + $this->pouvoir_special);
+        } elseif ($action == 2) {
+            // Se défendre
+            echo $this->nom . " se défend!\n";
         }
     }
 }
-class Ennemi {
-    public $nom;
-    public $pv;
-    public $degat;
-    
-    public function __construct($nom, $pv, $degat) {
-        $this->nom = $nom;
-        $this->pv = $pv;
-        $this->degat = $degat;
+// Fonction pour afficher les statistiques d'un personnage
+function afficher_statistiques($personnage) {
+    echo "Statistiques de " . $personnage->nom . ":\n";
+    echo "Niveau de puissance: " . $personnage->niveau_puissance . "\n";
+    echo "Points de vie: " . $personnage->points_vie . "\n";
+
+    if ($personnage instanceof Hero) {
+        echo "Super Pouvoir: " . $personnage->super_pouvoir . "\n";
+    } elseif ($personnage instanceof Mechant) {
+        echo "Pouvoir Spécial: " . $personnage->pouvoir_special . "\n";
     }
-    public function generer_ennemis_aleatoires() {
-        // Array of enemy names, genders, health points, and attack points
-        $ennemis = [
-            ["Dracula", "M", 30, 5],
-            ["Miss Pacman", "F", 12, 3],
-            ["StarFox", "M", 17, 6],
-            ["Goblin", "M", 10, 2],
-            ["Ogre", "M", 20, 8]
-        ];
-        $nb_ennemis = rand(1, 3);
-        $liste_ennemis = [];
-        // Loop to generate the enemies and add them to the array
-        for ($i = 0; $i < $nb_ennemis; $i++) {     // Select a random enemy from the array, add the new enemy to the array and create a new Ennemi object with the selected enemy's attributes
-            $ennemi = $ennemis[array_rand($ennemis)];
-            $nouvel_ennemi = new Ennemi($ennemi[0], $ennemi[2], $ennemi[3]);
-            $liste_ennemis[] = $nouvel_ennemi;
-        }
-        return $liste_ennemis;
-    }
-    public function attaquer($perso){
-        // Function to attack the player and decrease their health points
-        $degats_infliges = rand(1, $this->degat);
-        echo $this->nom." attaque ".$perso->nom." et inflige ".$degats_infliges." points de dégâts!\n";
-        $perso->pv -= $degats_infliges;
-        if ($perso->pv <= 0) {
-            echo $perso->nom." a été vaincu!\n";
-        }
-    }
-    
-    public function subir_degats($degats) {
-        // Function to decrease the enemy health points after being attacked
-        $this->pv -= $degats;
-        echo $this->nom. " subit " .$degats. " dégâts.\n";
-        if ($this->pv <= 0) {
-            echo $this->nom. " a été vaincu!\n";
-        }
-    }
-    public function recevoir_degats($degats) {
-        // Function to decrease the enemy health points after being attacked, used in multi-player mode
-        $this->pv -= $degats;
-        if ($this->pv <= 0) {
-            echo $this->nom. " est mort !\n";
+}
+
+// Fonction pour simuler un combat entre deux personnages
+function combat($personnage1, $personnage2) {
+    echo "Début du combat entre " . $personnage1->nom . " et " . $personnage2->nom . "!\n";
+
+    while ($personnage1->points_vie > 0 && $personnage2->points_vie > 0) {
+        // Le joueur choisit son attaque pour le Personnage 1
+        $actionPersonnage1 = $personnage1->choisirAttaque();
+        
+        if ($actionPersonnage1 == 1) {
+            $personnage1->attaquer($personnage2);
+        } elseif ($actionPersonnage1 == 2) {
+            // Le personnage se défend
         } else {
-            echo $this->nom. " a maintenant " .$this->pv. " points de vie.\n";
+            echo "Action invalide. Le personnage attaquera par défaut.\n";
+            $personnage1->attaquer($personnage2);
+        }
+
+        afficher_statistiques($personnage2);
+
+        // Vérifier si Personnage 2 est toujours en vie
+        if ($personnage2->points_vie <= 0) {
+            echo $personnage2->nom . " a été vaincu!\n";
+            break;
+        }
+
+        // Le méchant effectue une action aléatoire
+        $personnage2->attaquer($personnage1);
+
+        afficher_statistiques($personnage1);
+
+        // Vérifier si Personnage 1 est toujours en vie
+        if ($personnage1->points_vie <= 0) {
+            echo $personnage1->nom . " a été vaincu!\n";
+            break;
         }
     }
+
+    echo "Fin du combat!\n";
 }
-// Define a function to load data from a file
-function load_data($filename) {
-    $data = array();
-    if (file_exists($filename)) {
-        $data = unserialize(file_get_contents($filename));
-    }
-    return $data;
+
+// Création des héros
+$goku = new Hero("Goku", 10000, 500, 200);
+$vegeta = new Hero("Vegeta", 9500, 480, 180);
+$piccolo = new Hero("Piccolo", 9200, 550, 160);
+
+// Création des méchants
+$freezer = new Mechant("Freezer", 8500, 550, 250);
+$cell = new Mechant("Cell", 9000, 530, 220);
+$buu = new Mechant("Majin Buu", 9200, 600, 200);
+
+// Tableaux pour stocker les héros et les méchants disponibles
+$herosDisponibles = [$goku, $vegeta, $piccolo];
+$mechantsDisponibles = [$freezer, $cell, $buu];
+
+// Boucle pour trois combats
+for ($i = 0; $i < 3; $i++) {
+    // Sélectionner un héros et un méchant
+$heroChoisi = choisirPersonnage($herosDisponibles, "héros");
+$mechantChoisi = choisirPersonnage($mechantsDisponibles, "méchant");
+
+// Trouver la clé de l'élément à supprimer dans le tableau des méchants
+$keyToRemove = array_search($mechantChoisi, $mechantsDisponibles);
+
+// Vérifier si l'élément a été trouvé avant de le supprimer
+if ($keyToRemove !== false) {
+    unset($mechantsDisponibles[$keyToRemove]);
 }
-// Define a function to save data to a file
-function save_data($filename, $data) {
-    file_put_contents($filename, serialize($data));
+
+// Simuler le combat
+combat($heroChoisi, $mechantChoisi);
 }
 
-/* GAME SIMULATION */
-
-$load = readline("Voulez-vous charger une partie existante ? (O/N) : ");
-if (strtolower($load) == "o") {
-    // Load the existing game
-    $data = load_data('save.txt');
-    $perso = new Personnage($data['nom'], $data['sexe'], $data['classe']);
-    $nom = $data['nom'];
-    $sexe = $data['sexe'];
-    $classe = $data['classe'];
-    $pv = $data['pv'];
-    $degat = $data['degat'];
-    $niveau = $data['niveau'];
-    $nb_combats = $data['nb_combats'];
-    } else {
-        $nom = readline("Entrez votre nom: ");
-        $sexe = readline("Entrez votre sexe (M/F) : ");
-        $classe = '';
-        while (!in_array($classe, ['G', 'M', 'A', 'R'])) {
-            $classe = readline("Choisissez votre classe [(G)uerrier, (M)age, (A)rcher, ou (R)andom] : ");
-            $classe = strtoupper($classe);
-        }
-        if ($classe == "G") {
-            $pv = 50;
-            $degat = 8;
-        } elseif ($classe == "M") {
-            $pv = 25;
-            $degat = 16;
-        } elseif ($classe == "A") {
-            $pv = 35;
-            $degat = 12;
-        } else {
-            $pv = rand(20, 40);
-            $degat = rand(5, 15);
-            $classe = "R";
-        }
-        $perso = new Personnage($nom, $sexe, $classe);
+// Fonction pour permettre au joueur de choisir un personnage
+function choisirPersonnage($personnages, $type) {
+    echo "Choisissez un $type pour le combat :\n";
+    foreach ($personnages as $key => $personnage) {
+        echo "$key: " . $personnage->nom . "\n";
     }
 
-// Create an enemy 
-$ennemi = new Ennemi("Dracula", 30, 5);
-// Generate a list of random enemies
-$liste_ennemis = $ennemi->generer_ennemis_aleatoires();
-
-$nb_combats = 0;
-foreach ($liste_ennemis as $ennemi) {               // Loop through each enemy in the list
-
-    echo "Vous affrontez ".$ennemi->nom." (PV: ".$ennemi->pv.", Dégâts: ".$ennemi->degat.")\n";
-    $niveau = 1;
-    while ($perso->pv > 0 && $ennemi->pv > 0) {
-        echo "Tour suivant :\n";
-        $perso->attaquer($ennemi);
-        if ($ennemi->pv > 0) {                   // While both player and enemy have HP
-            $action_ennemi = rand(0, 1);
-            
-            if ($action_ennemi == 1) {          //If the number is 1, the enemy attacks
-                $ennemi->attaquer($perso);
-            } else {                            // Otherwise, the enemy does nothing
-                echo "L'ennemi n'a rien fait ce tour-ci.\n";
-            }
-        }
-        // Check if the player and enemy have remaining health and if the player has not used a potion
-        if ($perso->pv > 0 && !$perso->potion_utilisee && $ennemi->pv > 0) {
-            echo "Que voulez-vous faire ? (A)ttack, (D)efend, (P)otion : ";
-            $reponse = strtolower(readline());
-            if ($reponse == "a") {               // If the player chooses to attack, call the attack method on the player object
-                $perso->attaquer($ennemi);
-            } elseif ($reponse == "d") {         // If the player chooses to defend, call the defend method on the player object
-                $perso->defendre();
-                if ($ennemi->pv > 0) {           // If the enemy has remaining health after the player defends, reduce its health by half the player's attack value
-                    $degats_infliges = $perso->attaque / 2;
-                    $ennemi->subir_degats($degats_infliges);
-                    echo "Vous vous êtes défendu et avez infligé ".$degats_infliges." dégâts à l'ennemi.\n";
-                } else {                         // If the enemy has no remaining health after the player defends
-                    echo "Vous vous êtes défendu.\n";
-                }
-            } elseif ($reponse == "p") {          // If the player chooses to use a potion, call the use potion method on the player object
-                $perso->utiliser_potion();
-            } else {                            // If the player's response is invalid
-                echo "Réponse invalide.\n";
-            }
-        }
-        if ($perso->pv <= 0) {                  // If the player has been defeated
-            echo "Vous avez été vaincu par ".$ennemi->nom."...\n";
-            exit();                             // End the game
-        }
-        if ($ennemi->pv <= 0) {                 // If the enemy has been defeated
-            echo "Vous avez vaincu ".$ennemi->nom." !\n";
-            $nb_combats++;
-            if ($nb_combats >= pow(2, $niveau-1)) {         // If the player has fought enough battles to level 
-                $niveau++;
-                $perso->pv += 3;
-                $perso->attaque += 2;
-                $nb_combats = 0; // Reset the number of battles fought required for next level up to 0
-                echo "Vous avez atteint le niveau ".$niveau." ! Votre vie a augmenté de 3 et votre attaque de 2.\n";
-            }
-        }
-        // Save Data
-        $data = array('nom' => $nom, 'sexe' => $sexe, 'classe' => $classe, 'pv' => $pv, 'degat' => $degat, 'niveau' => $niveau, 'nb_combats' => $nb_combats);
-        save_data('save.txt', $data);
-    }
+    $choix = readline("Entrez le numéro du $type que vous souhaitez utiliser : ");
+    return $personnages[$choix];
 }
 ?>
