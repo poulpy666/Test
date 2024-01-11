@@ -1,98 +1,99 @@
 <?php
-    function afficher_statistiques($personnage) {
-        echo "Statistiques de " . $personnage->nom . ":\n";
-        echo "Niveau de puissance: " . $personnage->niveau_puissance . "\n";
-        echo "Points de vie: " . $personnage->points_vie . "\n";
 
-        if ($personnage instanceof Hero) {
-            echo "Super Pouvoir: " . $personnage->super_pouvoir . "\n";
-        } elseif ($personnage instanceof Mechant) {
-            echo "Pouvoir Spécial: " . $personnage->pouvoir_special . "\n";
+class Personnage {
+    public $nom;
+    public $niveau_puissance;
+    public $points_vie;
+
+    public function __construct($nom, $niveau_puissance, $points_vie) {
+        $this->nom = $nom;
+        $this->niveau_puissance = $niveau_puissance;
+        $this->points_vie = $points_vie;
+    }
+
+    public function prendreDegats($degats) {
+        $this->points_vie -= $degats;
+        if ($this->points_vie <= 0) {
+            $this->points_vie = 0;  // PV à 0 au lieu de valeurs négatives
         }
     }
+}
 
-// Fonction pour simuler un combat entre deux personnages
-do{
-    function combat($personnage1, $personnage2) {
-        echo "Début du combat entre " . $personnage1->nom . " et " . $personnage2->nom . "!\n";
+class Hero extends Personnage {
+    public $super_pouvoir;
 
-        while ($personnage1->points_vie > 0 && $personnage2->points_vie > 0) {
-            // Le joueur choisit son attaque pour le Personnage 1
-            $actionPersonnage1 = $personnage1->choisirAttaque();
-            
-            if ($actionPersonnage1 == 1) {
-                $personnage1->attaquer($personnage2);
-            } elseif ($actionPersonnage1 == 2) {
-                // Le personnage se défend //attaque spé
-            } else {
-                echo "Action invalide. Le personnage attaquera par défaut.\n";
-                $personnage1->attaquer($personnage2);
+    public function __construct($nom, $niveau_puissance, $points_vie, $super_pouvoir) {
+        parent::__construct($nom, $niveau_puissance, $points_vie);
+        $this->super_pouvoir = $super_pouvoir;
+    }
+
+    public function choisirAttaque() {
+        do {
+            echo "Choisissez une attaque pour " .$this->nom ." :\n";
+            echo "1: Attaque \n";
+            echo "2: Attaque au corps à corps\n";
+            echo "3: Se défendre\n";
+    
+            $choix = readline("Entrez le numéro de l'attaque que vous souhaitez utiliser : ");
+    
+            if ($choix < 1 || $choix > 3) {
+                echo "Choix invalide. Veuillez entrer un numéro entre 1 et 3.\n";
             }
+    
+        } while ($choix < 1 || $choix > 3);
+    
+        return $choix;
+    }
+    public function attaquer($cible, $attaqueChoisie) {
+        if ($attaqueChoisie == 1) {
+            $degats = (($this->super_pouvoir + $this->niveau_puissance)/ 10);
+            $cible->prendreDegats($degats);
+            echo $this->nom ." attaque ".$cible->nom." avec son attaque spéciale et inflige ".$degats. " dégâts!\n";
+        } elseif ($attaqueChoisie == 2) {
+            $cible->prendreDegats($this->super_pouvoir);
+            echo $this->nom." utilise son attaque au corps à corps contre ".$cible->nom ." et inflige " .$this->super_pouvoir." dégâts!\n";
+        } elseif ($attaqueChoisie == 3) {
+            $this->seDefendre($cible);
+        }
+    }
+    public function seDefendre($cible) {    
+        // Le méchant attaque par défaut après que le héros s'est défendu
+        $this->prendreDegats($cible->pouvoir_special);
+        echo $this->nom . " encaisse l'attaque normale de " . $cible->nom . " et subit " . $cible->pouvoir_special . " dégâts!\n";
+    }
+    // public function gagnerCombat() {
+    //         $this->niveau_puissance *= 1.2; // Augmenter la puissance de 20%
+    // }
+}
 
-            afficher_statistiques($personnage2);
+class Mechant extends Personnage {
+    public $pouvoir_special;
 
-            // Vérifier si Personnage 2 est toujours en vie
-            if ($personnage2->points_vie <= 0) {
-                echo $personnage2->nom . " a été vaincu!\n";
-                break;
-            }
+    public function __construct($nom, $niveau_puissance, $points_vie, $pouvoir_special) {
+        parent::__construct($nom, $niveau_puissance, $points_vie);
+        $this->pouvoir_special = $pouvoir_special;
+    }
 
-            // Le méchant effectue une action aléatoire
-            $personnage2->attaquer($personnage1);
+    public function choisirAttaque() {
+        return rand(1, 3);
+    }
 
-            afficher_statistiques($personnage1);
-
-            // Vérifier si Personnage 1 est toujours en vie
-            if ($personnage1->points_vie <= 0) {
-                echo $personnage1->nom . " a été vaincu!\n";
-                break;
-            }
+    public function attaquer($cible, $attaqueChoisie = null) {
+        if ($attaqueChoisie === null) {
+            $attaqueChoisie = $this->choisirAttaque();
         }
 
-        echo "Fin du combat!\n";
-        echo "Voulez-Vous 1-Continuer ou 2-Quitter?";
+        if ($attaqueChoisie == 1) {
+            $degats = (($this->pouvoir_special + $this->niveau_puissance )/ 5);
+            $cible->prendreDegats($degats);
+            echo $this->nom." attaque " .$cible->nom." avec son attaque spéciale et inflige ".$degats." dégâts!\n";
+        } elseif ($attaqueChoisie == 2) {
+            $cible->prendreDegats($this->pouvoir_special);
+            echo $this->nom ." utilise son attaque au corps à corps contre ".$cible->nom." et inflige ".$this->pouvoir_special." dégâts!\n";
+        } elseif ($attaqueChoisie == 3) {
+            $degats = $this->pouvoir_special / 2;
+            $cible->prendreDegats($degats);
+            echo $this->nom ." se défend et réduit les dégâts reçus de ".$degats."!\n";
+        }
     }
-}while($eccdc);
-
-// Création des héros
-$goku = new Hero("Goku", 10000, 500, 200);
-$vegeta = new Hero("Vegeta", 9500, 480, 180);
-$piccolo = new Hero("Piccolo", 9200, 550, 160);
-
-// Création des méchants
-$freezer = new Mechant("Freezer", 8500, 550, 250);
-$cell = new Mechant("Cell", 9000, 530, 220);
-$buu = new Mechant("Majin Buu", 9200, 600, 200);
-
-// Tableaux pour stocker les héros et les méchants disponibles
-$herosDisponibles = [$goku, $vegeta, $piccolo];
-$mechantsDisponibles = [$freezer, $cell, $buu];
-
-// Boucle pour trois combats
-for ($i = 0; $i < 3; $i++) {
-    // Sélectionner un héros et un méchant
-$heroChoisi = choisirPersonnage($herosDisponibles, "héros");
-$mechantChoisi = choisirPersonnage($mechantsDisponibles, "méchant");
-
-// Trouver la clé de l'élément à supprimer dans le tableau des méchants
-$keyToRemove = array_search($mechantChoisi, $mechantsDisponibles);
-
-// Vérifier si l'élément a été trouvé avant de le supprimer
-if ($keyToRemove !== false) {
-    unset($mechantsDisponibles[$keyToRemove]);
 }
-
-// Simuler le combat
-combat($heroChoisi, $mechantChoisi);
-}
-
-// Fonction pour permettre au joueur de choisir un personnage
-function choisirPersonnage($personnages, $type) {
-    echo "Choisissez un $type pour le combat :\n";
-    foreach ($personnages as $key => $personnage) {
-        echo "$key: " . $personnage->nom . "\n";
-    }
-
-    $choix = readline("Entrez le numéro du $type que vous souhaitez utiliser : ");
-    return $personnages[$choix];
-}?>
