@@ -11,10 +11,6 @@ class Personnage {
         $this->points_vie = $points_vie;
     }
 
-    public function attaquer($cible) {
-        // Code pour attaquer la cible
-    }
-
     public function prendreDegats($degats) {
         $this->points_vie -= $degats;
         if ($this->points_vie <= 0) {
@@ -45,8 +41,6 @@ class Hero extends Personnage {
         $choix = readline("Entrez le numéro de l'attaque que vous souhaitez utiliser : ");
         return $choix;
     }
-
-
     public function attaquer($cible) {
         if ($this->attaque_speciale_debloquee) {
             // Utiliser l'attaque spéciale
@@ -56,7 +50,6 @@ class Hero extends Personnage {
             $cible->prendreDegats($this->niveau_puissance + $this->super_pouvoir);
         }
     }
-
     public function debloquerAttaqueSpeciale() {
         $this->attaque_speciale_debloquee = true;
         echo $this->nom . " a débloqué une nouvelle attaque spéciale!\n";
@@ -113,7 +106,7 @@ function combat($personnage1, $personnage2) {
         if ($actionPersonnage1 == 1) {
             $personnage1->attaquer($personnage2);
         } elseif ($actionPersonnage1 == 2) {
-            // Le personnage se défend
+            // Le personnage se défend 
         } else {
             echo "Action invalide. Le personnage attaquera par défaut.\n";
             $personnage1->attaquer($personnage2);
