@@ -5,7 +5,7 @@
     public $pv;
     public $att;
 
-    public function construct($n,$p,$a){
+    public function __construct($n,$p,$a){
 
         $this->nom=$n;
         $this->pv=$p;
@@ -31,7 +31,7 @@
     protected $niveau;
     public function __construct($n,$p,$a,$ni){
 
-        parent::construct($n,$p,$a);
+        parent::__construct($n,$p,$a);
         $this->niveau=$ni;
     }
     public function getNiveau(){
@@ -47,21 +47,22 @@
     } 
     //Les Gentils   
  }
- $goku = new Heros("Goku",100,"Kaioken Smash",100000);
- $gohan = new Heros("Gohan",100,"Masenko",80000);
- $vegeta = new Heros("Vegeta",100,"Final Flash",95000);
+ $goku = new Heros("Goku\n",100,"\nKaioken Smash\n",100000);
+ $gohan = new Heros("Gohan\n",100,"\nMasenko\n",80000);
+ $vegeta = new Heros("Vegeta\n",100,"\nFinal Flash\n",95000);
 
  function affichagedata($personnage){
-    echo $personnage->nom;
-    echo $personnage->pv;
-    echo $personnage->att;
- }
+    echo"Personnage selectionné:\n";
+    echo "nom: ".$personnage->nom;
+    echo "Points de vies: ".$personnage->pv."\n";
+    echo "Attaque spéciale: ".$personnage->att."\n";
+}
  class Mechants extends Personnages{
 
     protected $niveau;
     public function __construct($n,$p,$a,$ni){
 
-        parent::construct($n,$p,$a);
+        parent::__construct($n,$p,$a);
         $this->niveau=$ni;
     }
 
@@ -79,32 +80,43 @@
     } 
     
     //Les mechants
-    public function getFreezer(){
-        $this->nom="Freezer";
-        $this->pv=100;
-        $this->att="Rayon de la mort";//25 dégats;
-        return ;
+    // public function getFreezer(){
+    //     $this->nom="Freezer";
+    //     $this->pv=100;
+    //     $this->att="Rayon de la mort";//25 dégats;
+    //     return ;
 
-        // niveau == 9 990
-    }
-    public function getCell(){
-        $this->nom="Cell";
-        $this->pv=100;
-        $this->att="Absorbtion vitale";// 20 dégats;
-        // niveau == 8 500
-    }
-    public function getBuu(){
-        $this->nom="Buu";
-        $this->pv=100;
-        $this->att="Rayon Chocolat"; // 15 dégats;
+    //     // niveau == 9 990
+    // }
+    // public function getCell(){
+    //     $this->nom="Cell";
+    //     $this->pv=100;
+    //     $this->att="Absorbtion vitale";// 20 dégats;
+    //     // niveau == 8 500
+    // }
+    // public function getBuu(){
+    //     $this->nom="Buu";
+    //     $this->pv=100;
+    //     $this->att="Rayon Chocolat"; // 15 dégats;
 
-        //niveau == 9500
-    }
+    //     //niveau == 9500
+    // }
+   
+}
+$freezer = new Mechants("Freezer\n",100,"\nRayon de la mort\n",100000);
+$cell = new Mechants("Cell\n",100,"\nAbsorbstion vitale\n",80000);
+$buu = new Mechants("Buu\n",100,"\nRayon Chocolat\n",95000);
 
-    public function attack(){
-
-    }
-
- }
+function affichagenom($perso){
+echo $perso->nom;
+// echo "Points de vies ".$perso->pv."\n";
+// echo "Attaque spéciale ".$perso->att."\n";
+}
+// function affichagenomc($cell){
+//     echo $cell->nom;
+// }
+// function affichagenomb($buu){
+//     echo $buu->nom;
+// }
 
 ?>

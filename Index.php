@@ -1,56 +1,46 @@
 <?php  //on mets pas l'option quitter au début mais à la fin d'un combat sinon,
     
     // Menu principal du jeu
-    function Partie(){
+    function Partie(){//
         do{ 
             //Selection personnage
             function ChoixPerso(){
                 include 'Personnage.php';
-                $choixperso = readline("1 Goku 2 Gohan 3 Vegeta: ");
-                switch($choixperso){
-                    case 1:
+                $choixperso = readline("1 Goku 2 Gohan 3 Vegeta:");
+                // FAIRE UNE BOUCLE POUR LE CHOIX!
                         if($choixperso==1){
-                        affichagedata($goku);
+                        affichagedata($goku);  
                     }
-                    case 2:
-                        if($choixperso==2){
-                       affichagedata($gohan);
-                        break;
+                    elseif($choixperso==2){
+                       affichagedata($gohan);   
                     }
-                    case 3:
-                    if($choixperso==3){
+                    elseif($choixperso==3){
                        affichagedata($vegeta);
-                        break;
                     }
-                    case 4:
-                    if($choixperso != 1 or 2 or 3 or 4){
-                    
+                    else{
                         echo "Vous devez faire un choix \n";
                     }
                     
-                } 
+                
             }
             echo "Bienvenue dans DragonBall typing fighters Z, choisis un de ces trois personages: \n";
             //lancement function ChoixPerso
             ChoixPerso();
         
-           /* function Ennemi(){
-                $randm= rand(1,3);
-                    if ($randm==1) {
-                        
-                            $freezer = new Mechants();
-                            echo "Tu vas affronter $-> getFreezer()." est ton adversaire\n";
-                            break;
-                        case 2:
-                            $cell= new Mechants();
-                            echo $cell-> getCell()." est ton adversaire\n";
-                            break;
-                        case 3:
-                            $buu= new Mechants();
-                            echo $buu -> getBuu()." est ton adversaire\n";
-                            break;
-                    }   
-            }*/
+           function Ennemi(){
+                include 'Personnage.php';
+                $randm=rand(1,3);
+                if($randm==1){
+                    echo"Vous allez affronter: ".affichagenom($freezer); 
+                }
+                elseif($randm==2){
+                    echo"Vous allez affronter: ".affichagenom($cell); 
+                }
+                elseif($randm==3){
+                echo"Vous allez affronter: ".affichagenom($buu); 
+                }
+             }
+          Ennemi();
             $stopouencore= readline("1 pour continuer, 2 pour quitter :");
         }  while($stopouencore!=2);
     //fin partie
