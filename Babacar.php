@@ -11,10 +11,6 @@ class Personnage {
         $this->points_vie = $points_vie;
     }
 
-    public function attaquer($cible) {
-        // Code pour attaquer la cible
-    }
-
     public function prendreDegats($degats) {
         $this->points_vie -= $degats;
         if ($this->points_vie <= 0) {
@@ -29,7 +25,7 @@ class Personnage {
 
 class Hero extends Personnage {
     public $super_pouvoir;
-    private $attaque_speciale_debloquee = false;
+    private $attaque_speciale;
 
     public function __construct($nom, $niveau_puissance, $points_vie, $super_pouvoir) {
         parent::__construct($nom, $niveau_puissance, $points_vie);
@@ -48,7 +44,7 @@ class Hero extends Personnage {
 
 
     public function attaquer($cible) {
-        if ($this->attaque_speciale_debloquee) {
+        if ($this->attaque_speciale) {
             // Utiliser l'attaque spéciale
             $cible->prendreDegats($this->niveau_puissance + $this->super_pouvoir * 2);
         } else {
