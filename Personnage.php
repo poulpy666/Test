@@ -28,8 +28,8 @@
 
 //Classes enfants de Personnages
  class Heros extends Personnages{
-
-    public function construct($n,$p,$a){
+    protected $niveau;
+    public function __construct($n,$p,$a,$ni){
 
         parent::construct($n,$p,$a);
         $this->niveau=$ni;
@@ -38,37 +38,23 @@
 
         return $this->niveau;
     }
-    public function setNiveau(){
+    public function setNiveau($newNiveau){
         $this->niveau=$newNiveau;
     }
 
-    public function setPV(){
-        $this->pv=$npv;
+    public function setPV($npv){
+       $this->pv=$npv;
     } 
+    //Les Gentils   
+ }
+ $goku = new Heros("Goku",100,"Kaioken Smash",100000);
+ $gohan = new Heros("Gohan",100,"Masenko",80000);
+ $vegeta = new Heros("Vegeta",100,"Final Flash",95000);
 
-    //Les Gentils
-    public function getGoku(){
-       $name = $this->nom="Goku";
-       $life = $this->pv=100;
-        $att = $this->att="Kaioken Smash";// 25 dégats;
-     //niveau == 10 000
-     return $name; // ouais alors on peut set les pv a 100 sans les get dans les perso
-    }
-    public function getGohan(){
-        $name = $this->nom="Gohan";
-        $life = $this->pv=100;
-         $att = $this->att="Masenko";//15 dégats;
-         return $name;
-        //niveau == 9 000
-    }
-    public function getVegeta(){
-        $name = $this->nom="Vegeta";
-        $life = $this->pv=100;
-         $att = $this->att="Final Flash";//20 dégats;
-         return $name;
-        //niveau == 9 500
-    }
-
+ function affichagedata($personnage){
+    echo $personnage->nom;
+    echo $personnage->pv;
+    echo $personnage->att;
  }
  class Mechants extends Personnages{
 
@@ -85,19 +71,19 @@
     }
 
     public function setNiveau(){
-        $this->niveau=$newNiveau;
+       // $this->niveau=$newNiveau;
     }
 
     public function setPV(){
-        $this->pv=$npv;
+      //  $this->pv=$npv;
     } 
     
     //Les mechants
     public function getFreezer(){
-        $name = $this->nom="Freezer";
-        $life = $this->pv=100;
-        $att = $this->att="Rayon de la mort";//25 dégats;
-        return $name;
+        $this->nom="Freezer";
+        $this->pv=100;
+        $this->att="Rayon de la mort";//25 dégats;
+        return ;
 
         // niveau == 9 990
     }

@@ -1,28 +1,25 @@
 <?php  //on mets pas l'option quitter au début mais à la fin d'un combat sinon,
-    include 'Personnage.php';
+    
     // Menu principal du jeu
     function Partie(){
         do{ 
             //Selection personnage
             function ChoixPerso(){
+                include 'Personnage.php';
                 $choixperso = readline("1 Goku 2 Gohan 3 Vegeta: ");
                 switch($choixperso){
                     case 1:
                         if($choixperso==1){
-                        $goku = new Heros();
-                        echo $goku -> getGoku()." a été selectionné\n";
-                        break;
+                        affichagedata($goku);
                     }
                     case 2:
                         if($choixperso==2){
-                        $gohan = new Heros();
-                        echo $gohan -> getGohan()." a été selectionné\n";
+                       affichagedata($gohan);
                         break;
                     }
                     case 3:
                     if($choixperso==3){
-                        $vegeta = new Heros();
-                        echo $vegeta -> getVegeta()." a été selectionné\n";
+                       affichagedata($vegeta);
                         break;
                     }
                     case 4:
@@ -39,10 +36,10 @@
         
            /* function Ennemi(){
                 $randm= rand(1,3);
-                    switch ($randm) {
-                        case 1:
+                    if ($randm==1) {
+                        
                             $freezer = new Mechants();
-                            echo $freezer -> getFreezer()." est ton adversaire\n";
+                            echo "Tu vas affronter $-> getFreezer()." est ton adversaire\n";
                             break;
                         case 2:
                             $cell= new Mechants();
@@ -57,9 +54,12 @@
             $stopouencore= readline("1 pour continuer, 2 pour quitter :");
         }  while($stopouencore!=2);
     //fin partie
-    }//on touche pas à cette acollade elle englobe toute la partie
-        
-    
+    }//on touche pas à cette acollade elle englobe toute la partie    
 
     Partie();//la function Partie englobe tout le déroulement des combats et le jeu en globalité
+
+    // A FAIRE : changer pv nom ennemis et heros (nomf nomgk etc...);ennemi random et système combat 
+
 ?>
+
+
