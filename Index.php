@@ -46,7 +46,7 @@ class Hero extends Personnage {
     }
     public function attaquer($cible, $attaqueChoisie) {
         if ($attaqueChoisie == 1) {
-            $degats = (($this->super_pouvoir + $this->niveau_puissance)/ 10);
+            $degats = (($this->super_pouvoir + $this->niveau_puissance)/ 20);
             $cible->prendreDegats($degats);
             echo $this->nom ." attaque ".$cible->nom." avec son attaque spéciale et inflige ".$degats. " dégâts!\n";
         } elseif ($attaqueChoisie == 2) {
@@ -84,7 +84,7 @@ class Mechant extends Personnage {
         }
 
         if ($attaqueChoisie == 1) {
-            $degats = (($this->pouvoir_special + $this->niveau_puissance )/ 5);
+            $degats = (($this->pouvoir_special + $this->niveau_puissance )/ 20);
             $cible->prendreDegats($degats);
             echo $this->nom." attaque " .$cible->nom." avec son attaque spéciale et inflige ".$degats." dégâts!\n";
         } elseif ($attaqueChoisie == 2) {
