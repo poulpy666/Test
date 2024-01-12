@@ -61,9 +61,9 @@ class Hero extends Personnage {
         $this->prendreDegats($cible->pouvoir_special);
         echo $this->nom . " encaisse l'attaque normale de " . $cible->nom . " et subit " . $cible->pouvoir_special . " dégâts!\n";
     }
-    // public function gagnerCombat() {
-    //         $this->niveau_puissance *= 1.2; // Augmenter la puissance de 20%
-    // }
+    public function gagnerCombat() {
+            $this->niveau_puissance *= 1.2; // Augmenter la puissance de 20%
+    }
 }
 
 class Mechant extends Personnage {

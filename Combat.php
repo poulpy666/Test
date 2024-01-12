@@ -23,65 +23,48 @@ function choisirPersonnage($personnages, $type) {
         }
 
     } while (!isset($personnages[$choix - 1]));
-
     return $personnages[$choix - 1];
 }
 
 function combat($personnage1, $personnage2) {
     echo "Début du combat entre ".$personnage1->nom." et ".$personnage2->nom."!\n";
-
-    // Afficher les statistiques complètes avant le combat
+    // Affichage des stats avant le combat
     afficher_statistiques($personnage1);
     afficher_statistiques($personnage2);
-
     while ($personnage1->points_vie > 0 && $personnage2->points_vie > 0) {
         $actionPersonnage1 = $personnage1->choisirAttaque();
-    
+        
         if ($actionPersonnage1 == 1 || $actionPersonnage1 == 2) {
             $personnage1->attaquer($personnage2, $actionPersonnage1);
         } elseif ($actionPersonnage1 == 3) {
             // Le personnage se défend
-            $personnage1->seDefendre($personnage2); // Appel de la méthode seDefendre
+            $personnage1->seDefendre($personnage2);
         } else {
             echo "Action invalide. Veuillez entrer un numéro entre 1 et 3.\n";
             continue; // Revenir au début de la boucle pour permettre une nouvelle saisie
         }
-        
-    
-        // Afficher uniquement les points de vie
+        // Affichage unique des points de vie
         echo "Points de vie de ".$personnage2->nom.": ".$personnage2->points_vie."\n";
-    
         if ($personnage2->points_vie <= 0) {
             echo $personnage2->nom." a été vaincu!\n";
             break;
         }
-    
         $personnage2->attaquer($personnage1);
-    
         // Afficher uniquement les points de vie
-        echo "Points de vie de ".$personnage1->nom.": ".$personnage1->points_vie."\n";
-    
+        echo "Points de vie de ".$personnage1->nom.": ".$personnage1->points_vie."\n";    
         if ($personnage1->points_vie <= 0) {
             echo $personnage1->nom." a été vaincu!\n";
             break;
         }
     }
-
-    // if ($personnage1->points_vie > 0) {
-    //     afficher_statistiques($personnage1);
-    //     $personnage1->gagnerCombat(); // Placé ici pour ne l'appeler que si le Hero a gagné
-    //     echo $personnage1->nom . " a débloqué l'attaque ultime 'Kamehameha' et sa puissance a augmenté!\n";
-    // } elseif ($personnage2->points_vie > 0) {
-    //     afficher_statistiques($personnage2);
-    // }
-
-       // Afficher les statistiques complètes après le combat, mais seulement pour le vainqueur
-       if ($personnage1->points_vie > 0) {
+// Affichage des statistiques complètes après le combat que du vainqueur
+    if ($personnage1->points_vie > 0) {
         afficher_statistiques($personnage1);
+        $personnage1->gagnerCombat(); // Placé ici pour ne l'appeler que si le Hero a gagné
+        echo $personnage1->nom . " a débloqué l'attaque ultime 'Kamehameha' et sa puissance a augmenté!\n";
     } elseif ($personnage2->points_vie > 0) {
         afficher_statistiques($personnage2);
     }
-
     echo "Fin du combat!\n";
 }
 
@@ -109,7 +92,6 @@ for ($i = 0; $i < 3; $i++) {
         unset($mechantsDisponibles[$keyToRemove]);
         unset($herosDisponibles[$keyToRemove1]);
     }
-
     combat($heroChoisi, $mechantChoisi);
 
     if ($heroChoisi->points_vie > 0) {
