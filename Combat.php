@@ -11,18 +11,19 @@ function afficher_statistiques($personnage) {
 }
 
 function choisirPersonnage($personnages, $type) {
+    //$type=(Hero ou Mechant)
     do {
         echo "Choisissez un $type pour le combat :\n";
         foreach ($personnages as $key => $personnage) {
-            $key++;
+            $key++;// pour faire commencer la selection des personnage a partir 1
             echo "$key: " .$personnage->nom ."\n";
         }
         $choix = readline("Entrez le numéro du $type que vous souhaitez utiliser : ");
-        if (!isset($personnages[$choix - 1])) {
+        if (!isset($personnages[$choix - 1])) { // verifie que la selection de personnage est possible (si 2 restants pas pouvoir selectionner 3)
             echo "Choix invalide. Veuillez entrer un numéro valide.\n";
         }
 
-    } while (!isset($personnages[$choix - 1]));
+    } while (!isset($personnages[$choix - 1]));//ce while permet d'afficher seulement les personnages restant
     return $personnages[$choix - 1];
 }
 
@@ -35,13 +36,13 @@ function combat($personnage1, $personnage2) {
         $actionPersonnage1 = $personnage1->choisirAttaque();
         
         if ($actionPersonnage1 == 1 || $actionPersonnage1 == 2) {
-            $personnage1->attaquer($personnage2, $actionPersonnage1);
+            $personnage1->attaquer($personnage2, $actionPersonnage1);//dans ce cas les deux personnages attaquent
         } elseif ($actionPersonnage1 == 3) {
-            // Le personnage se défend
+            // Le heros se défend de l'attaque ennemie
             $personnage1->seDefendre($personnage2);
         } else {
             echo "Action invalide. Veuillez entrer un numéro entre 1 et 3.\n";
-            continue; // Revenir au début de la boucle pour permettre une nouvelle saisie
+            continue; // Revient au début de la boucle pour permettre une nouvelle saisie
         }
         // Affichage unique des points de vie
         echo "Points de vie de ".$personnage2->nom.": ".$personnage2->points_vie."\n";
@@ -49,7 +50,7 @@ function combat($personnage1, $personnage2) {
             echo $personnage2->nom." a été vaincu!\n";
             break;
         }
-        $personnage2->attaquer($personnage1);
+        $personnage2->attaquer($personnage1);// ennemi -> attaque --> perso
         // Afficher uniquement les points de vie
         echo "Points de vie de ".$personnage1->nom.": ".$personnage1->points_vie."\n";    
         if ($personnage1->points_vie <= 0) {
@@ -103,7 +104,7 @@ for ($i = 0; $i < 3; $i++) {
 }
 
 $nombreTotalMechants = count($mechantsDisponibles);
-
+// definit si les méchants ont été vaincus.
 if ($nombreMechantsVaincus == $nombreTotalMechants) {
     echo "Vous avez gagné! :) ";
 } else {

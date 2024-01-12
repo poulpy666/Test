@@ -1,5 +1,5 @@
 <?php
-
+//Creation de la classe personnage
 class Personnage {
     public $nom;
     public $niveau_puissance;
@@ -10,15 +10,15 @@ class Personnage {
         $this->niveau_puissance = $niveau_puissance;
         $this->points_vie = $points_vie;
     }
-
+// Nous avons rajoutés pv=0 pour éviter d'avoir des valeurs négatives
     public function prendreDegats($degats) {
         $this->points_vie -= $degats;
         if ($this->points_vie <= 0) {
-            $this->points_vie = 0;  // PV à 0 au lieu de valeurs négatives
+            $this->points_vie = 0; 
         }
     }
 }
-
+//Creation de la classe Heros enfant de personnage
 class Hero extends Personnage {
     public $super_pouvoir;
 
@@ -26,7 +26,8 @@ class Hero extends Personnage {
         parent::__construct($nom, $niveau_puissance, $points_vie);
         $this->super_pouvoir = $super_pouvoir;
     }
-
+// definit une action choisie par l'utilisateur.
+//l'utilisateur est obligé de choisir une des trois actions.
     public function choisirAttaque() {
         do {
             echo "Choisissez une attaque pour " .$this->nom ." :\n";
@@ -44,13 +45,14 @@ class Hero extends Personnage {
     
         return $choix;
     }
+    // Les fonction attaquer se défendre definissent les impacts des actions de l'utilisateur.
     public function attaquer($cible, $attaqueChoisie) {
         if ($attaqueChoisie == 1) {
             $degats = (($this->super_pouvoir + $this->niveau_puissance)/ 20);
             $cible->prendreDegats($degats);
             echo $this->nom ." attaque ".$cible->nom." avec son attaque spéciale et inflige ".$degats. " dégâts!\n";
         } elseif ($attaqueChoisie == 2) {
-            $cible->prendreDegats($this->super_pouvoir);
+            $cible->prendreDegats($this->super_pouvoir/0.5);
             echo $this->nom." utilise son attaque au corps à corps contre ".$cible->nom ." et inflige " .$this->super_pouvoir." dégâts!\n";
         } elseif ($attaqueChoisie == 3) {
             $this->seDefendre($cible);
@@ -61,6 +63,7 @@ class Hero extends Personnage {
         $this->prendreDegats($cible->pouvoir_special);
         echo $this->nom . " encaisse l'attaque normale de " . $cible->nom . " et subit " . $cible->pouvoir_special . " dégâts!\n";
     }
+    // augmente le niveau de puissance du héros après la victoire
     public function gagnerCombat() {
             $this->niveau_puissance *= 1.2; // Augmenter la puissance de 20%
     }
@@ -73,7 +76,7 @@ class Mechant extends Personnage {
         parent::__construct($nom, $niveau_puissance, $points_vie);
         $this->pouvoir_special = $pouvoir_special;
     }
-
+//aléatoire des actions ennemies
     public function choisirAttaque() {
         return rand(1, 3);
     }
@@ -82,7 +85,6 @@ class Mechant extends Personnage {
         if ($attaqueChoisie === null) {
             $attaqueChoisie = $this->choisirAttaque();
         }
-
         if ($attaqueChoisie == 1) {
             $degats = (($this->pouvoir_special + $this->niveau_puissance )/ 20);
             $cible->prendreDegats($degats);
