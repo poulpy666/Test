@@ -30,7 +30,7 @@ class Hero extends Personnage {
     public function choisirAttaque() {
         do {
             echo "Choisissez une attaque pour " .$this->nom ." :\n";
-            echo "1: Attaque \n";
+            echo "1: Attaque spéciale \n";
             echo "2: Attaque au corps à corps\n";
             echo "3: Se défendre\n";
     
